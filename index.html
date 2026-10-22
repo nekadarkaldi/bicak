@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>★ Kukri Bıçağı | Solgun — Takas Kilitli</title>
+<style>
+  :root{
+    --bg:#0a0d12;
+    --card:#12161f;
+    --card2:#0f141b;
+    --line:#1e2530;
+    --txt:#e7edf5;
+    --muted:#8a97a8;
+    --gold:#d9a13b;
+    --red:#e35d5d;
+    --green:#4ade80;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background: radial-gradient(800px 500px at 50% -10%, rgba(217,161,59,.08), transparent 60%), var(--bg);
+    color:var(--txt);
+    font-family:"Segoe UI",Roboto,-apple-system,BlinkMacSystemFont,Arial,sans-serif;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px 16px;
+  }
+
+  .wrap{width:100%;max-width:780px}
+
+  /* ---------- ÜST BAŞLIK ---------- */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:12px;margin-bottom:16px;flex-wrap:wrap;
+  }
+  .brand{
+    font-size:12px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--muted);font-weight:600;
+  }
+  .brand b{color:var(--gold)}
+
+  .lockpill{
+    display:inline-flex;align-items:center;gap:8px;
+    background:rgba(227,93,93,.08);
+    border:1px solid rgba(227,93,93,.25);
+    color:#ff9b9b;
+    padding:6px 14px;border-radius:999px;
+    font-size:12px;font-weight:600;letter-spacing:.04em;
+    text-transform:uppercase;
+    transition:.35s;
+  }
+  .lockpill.open{
+    background:rgba(74,222,128,.08);
+    border-color:rgba(74,222,128,.30);
+    color:var(--green);
+  }
+
+  /* ---------- KART ---------- */
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 20px 40px -15px rgba(0,0,0,.8);
+  }
+
+  /* ---------- EŞYA GÖRSEL ALANI (KAFES EKLENDİ) ---------- */
+  .hero{
+    position:relative;
+    padding:40px 24px 30px;
+    text-align:center;
+    border-bottom:1px solid var(--line);
+    background: radial-gradient(350px 200px at 50% 40%, rgba(217,161,59,.1), transparent 70%);
+  }
+  
+  /* Kafes Konteyneri */
+  .cage-container {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.8);
+    border: 2px solid #2a313c;
+  }
+
+  .skin-img {
+    width: 100%;
+    max-width: 320px;
+    display: block;
+    filter: brightness(0.85); /* Kafes içinde biraz daha loş dursun */
+  }
+
+  /* Demir Parmaklıklar */
+  .cage-bars {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: 
+      repeating-linear-gradient(90deg, transparent, transparent 28px, rgba(10, 12, 16, 0.9) 28px, rgba(10, 12, 16, 0.9) 34px),
+      repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(10, 12, 16, 0.9) 28px, rgba(10, 12, 16, 0.9) 34px);
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.9);
+    z-index: 2;
+  }
+
+  /* Ortadaki Asma Kilit */
+  .padlock {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 52px;
+    z-index: 3;
+    filter: drop-shadow(0 0 15px rgba(0,0,0,0.9));
+    animation: lockPulse 3s infinite;
+  }
+
+  @keyframes lockPulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); filter: drop-shadow(0 0 10px rgba(255,255,255,0.1)); }
+    50% { transform: translate(-50%, -50%) scale(1.05); filter: drop-shadow(0 0 20px rgba(255,255,255,0.3)); }
+  }
+
+  .itemname{
+    margin:0 0 8px;
+    font-size:clamp(22px,4vw,28px);
+    font-weight:700;
+    color: #fff;
+    letter-spacing:.3px;
+  }
+  
+  .subtle{color:var(--muted);font-size:13px;letter-spacing:.05em; font-weight:500;}
+
+  /* ---------- GERİ SAYIM ---------- */
+  .countdownwrap{padding:24px 24px 10px;text-align:center}
+  .cd-label{
+    font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--muted);font-weight:600;margin-bottom:14px;
+  }
+  .countdown{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    max-width:500px;margin:0 auto;
+  }
+  .unit{
+    background:#0d1117;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:12px 6px 10px;
+  }
+  .unit .num{
+    font-family:ui-monospace,"SF Mono",Consolas,monospace;
+    font-size:clamp(24px,5vw,32px);
+    font-weight:700;
+    color:#fff;
+    line-height:1;
+  }
+  .unit .lab{
+    margin-top:6px;font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--muted);font-weight:600;
+  }
+
+  /* ---------- İLERLEME ÇUBUĞU ---------- */
+  .progress{padding:20px 24px 24px;max-width:540px;margin:0 auto}
+  .bar{
+    height:6px;border-radius:99px;background:#0d1117;
+    border:1px solid var(--line);overflow:hidden;
+  }
+  .bar > i{
+    display:block;height:100%;width:0%;
+    border-radius:99px;
+    background:linear-gradient(90deg,#ff6b6b,#ffc65c,#ffe66d,#6ee79a,#63c4ff);
+    background-size:200% 100%;
+    animation:flow 7s linear infinite;
+    transition:width .6s ease;
+  }
+  @keyframes flow{to{background-position:200% 0}}
+  
+  .progress .cap{
+    display:flex;justify-content:space-between;
+    font-size:11px;color:var(--muted);margin-top:8px;
+  }
+
+  /* ---------- SADE BİLGİ LİSTESİ ---------- */
+  .info-list {
+    border-top: 1px solid var(--line);
+    background: var(--card2);
+    padding: 8px 24px;
+  }
+  
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 14px;
+  }
+  .info-row:last-child { border-bottom: none; }
+  
+  .info-row .label { color: var(--muted); font-size: 13px; }
+  
+  .info-row .value {
+    font-weight: 600;
+    color: #e7edf5;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .value.gold { color: var(--gold); }
+  .value.red { color: #ff9b9b; }
+  .value.mono { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
+
+  .copy{
+    background:none;border:1px solid var(--line);color:var(--muted);
+    border-radius:6px;padding:2px 6px;font-size:10px;cursor:pointer;
+    transition:.2s;font-family:inherit;
+  }
+  .copy:hover{border-color:var(--gold);color:var(--gold)}
+
+  /* ---------- AKSİYONLAR (TEK BUTON) ---------- */
+  .actions{
+    display:flex;
+    padding:24px;
+    border-top:1px solid var(--line);
+    background:rgba(0,0,0,0.2);
+  }
+  
+  .btn-want {
+    width: 100%;
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    padding:16px 20px;border-radius:10px;
+    font-size:16px;font-weight:800; letter-spacing:0.5px;
+    text-decoration:none;cursor:pointer;border:none;
+    background: linear-gradient(135deg, #ff4b4b, #cc0000);
+    color: white;
+    box-shadow: 0 4px 15px rgba(204, 0, 0, 0.4);
+    transition: .2s;
+    animation: btnPulse 2s infinite;
+  }
+  
+  .btn-want:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.15);
+    animation: none;
+  }
+
+  @keyframes btnPulse {
+    0% { box-shadow: 0 0 0 0 rgba(204, 0, 0, 0.6); }
+    70% { box-shadow: 0 0 0 15px rgba(204, 0, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(204, 0, 0, 0); }
+  }
+
+  /* ---------- NOT ---------- */
+  .note{
+    margin-top:16px;font-size:12px;line-height:1.6;
+    color:var(--muted);text-align:center;
+  }
+  .note code{
+    background:#0d1117;border:1px solid var(--line);
+    padding:2px 6px;border-radius:4px;color:#c7d2e0;
+  }
+
+  /* ---------- MODAL (FOTOĞRAF EFEKTİ) ---------- */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .modal.show {
+    display: flex;
+    opacity: 1;
+  }
+  
+  .modal-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90vh;
+    animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  
+  @keyframes zoomIn {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  
+  .modal-content img {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+    border: 3px solid #2a313c;
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: -45px;
+    right: 0;
+    color: #fff;
+    font-size: 36px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+    line-height: 1;
+  }
+  
+  .close-btn:hover {
+    color: var(--red);
+  }
+
+  /* ---------- AÇILDI DURUMU ---------- */
+  .unlocked-msg{
+    display:none;padding:24px;text-align:center;
+  }
+  .unlocked-msg.show{display:block}
+  .unlocked-msg .big{
+    font-size:20px;font-weight:700;color:var(--green);
+  }
+
+  @media (max-width:600px){
+    .info-row { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .info-row .value { width: 100%; justify-content: space-between; }
+    .countdown{gap:6px}
+    .unit{padding:10px 4px}
+    .cage-container { max-width: 90%; }
+    .skin-img { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand">CS2 Envanter · <b>Takas Durumu</b></div>
+    <div class="lockpill" id="lockpill">
+      <span id="lockicon">🔒</span>
+      <span id="locktext">Takas Korumalı</span>
+    </div>
+  </div>
+
+  <div class="card">
+
+    <!-- EŞYA GÖRSELİ VE İSMİ (KAFES İÇİNDE) -->
+    <div class="hero">
+      
+      <div class="cage-container">
+        <img src="https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpovbSsLQJf2ObDYzR97dGJjoWJhfbLP7LWnn8fvZIgjrGYpo-m3wbmqBU6NmmmLYaTIQFqMAzR8gfrx-rs1JK77pWdmmwj5HfC17GeYA" alt="★ Kukri Bıçağı | Solgun" class="skin-img">
+        <div class="cage-bars"></div>
+        <div class="padlock">🔒</div>
+      </div>
+
+      <h1 class="itemname">★ Kukri Bıçağı | Solgun</h1>
+      <div class="subtle">Counter-Strike 2 · Çok Gizli Bıçak</div>
+    </div>
+
+    <!-- GERİ SAYIM -->
+    <div class="countdownwrap" id="cdwrap">
+      <div class="cd-label">Takas kilidinin açılmasına kalan süre</div>
+      <div class="countdown">
+        <div class="unit"><div class="num" id="d">--</div><div class="lab">Gün</div></div>
+        <div class="unit"><div class="num" id="h">--</div><div class="lab">Saat</div></div>
+        <div class="unit"><div class="num" id="m">--</div><div class="lab">Dakika</div></div>
+        <div class="unit"><div class="num" id="s">--</div><div class="lab">Saniye</div></div>
+      </div>
+    </div>
+
+    <!-- AÇILDI MESAJI -->
+    <div class="unlocked-msg" id="unlockedMsg">
+      <div class="big">✅ Kilit Açıldı — Artık Takas Edilebilir</div>
+      <div class="subtle" style="margin-top:6px">Bu eşya üzerindeki takas kısıtlaması kalktı.</div>
+    </div>
+
+    <!-- İLERLEME -->
+    <div class="progress" id="progressWrap">
+      <div class="bar"><i id="bar"></i></div>
+      <div class="cap">
+        <span>Kilit başlangıcı</span>
+        <span id="pct">%0</span>
+        <span>Kilit bitişi</span>
+      </div>
+    </div>
+
+    <!-- SADE DETAY LİSTESİ -->
+    <div class="info-list">
+      <div class="info-row">
+        <span class="label">Eşya</span>
+        <span class="value gold">★ Kukri Bıçağı | Solgun</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Nadirlik</span>
+        <span class="value red">★ Çok Gizli Bıçak</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Dış Görünüm</span>
+        <span class="value">Fabrikadan Yeni Çıkmış</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Aşınma (Float)</span>
+        <span class="value mono">0,013237278
+          <button class="copy" data-copy="0.013237278">kopyala</button>
+        </span>
+      </div>
+      <div class="info-row">
+        <span class="label">Kalıp Şablonu</span>
+        <span class="value mono">561
+          <button class="copy" data-copy="561">kopyala</button>
+        </span>
+      </div>
+      <div class="info-row">
+        <span class="label">Koleksiyon</span>
+        <span class="value">Kilovat Koleksiyonu</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Takas Kilit Bitişi</span>
+        <span class="value gold">29.10.2026 · 04:00</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Durum</span>
+        <span class="value red">Takas Edilemez · Pazarlanamaz</span>
+      </div>
+    </div>
+
+    <!-- TEK AKSİYON BUTONU -->
+    <div class="actions">
+      <button class="btn-want" id="wantBtn">
+        🔥 BEN HEMEN İSTİYORUM
+      </button>
+    </div>
+  </div>
+
+  <p class="note">
+    Kilit bitiş zamanı: <code>29.10.2026 04:00:00</code> — Bu tarihe kadar eşya tüketilemez, değiştirilemez veya transfer edilemez.
+  </p>
+</div>
+
+<!-- FOTOĞRAF MODALI -->
+<div class="modal" id="memeModal">
+  <div class="modal-content">
+    <span class="close-btn" id="closeModal">&times;</span>
+    <img src="https://i.imgflip.com/9dmdmx.jpg" alt="Bekleme Sırası">
+  </div>
+</div>
+
+<script>
+  /* ====== AYARLAR ====== */
+  const UNLOCK_AT = new Date(2026, 9, 29, 4, 0, 0);   // 29 Ekim 2026 04:00
+  const LOCK_START = new Date(UNLOCK_AT.getTime() - 7 * 24 * 60 * 60 * 1000); // 7 günlük kilit süresi
+
+  const el = {
+    d: document.getElementById('d'),
+    h: document.getElementById('h'),
+    m: document.getElementById('m'),
+    s: document.getElementById('s'),
+    bar: document.getElementById('bar'),
+    pct: document.getElementById('pct'),
+    pill: document.getElementById('lockpill'),
+    icon: document.getElementById('lockicon'),
+    text: document.getElementById('locktext'),
+    cdwrap: document.getElementById('cdwrap'),
+    progress: document.getElementById('progressWrap'),
+    unlocked: document.getElementById('unlockedMsg')
+  };
+
+  const pad = n => String(n).padStart(2, '0');
+
+  function tick(){
+    const now  = Date.now();
+    const diff = UNLOCK_AT.getTime() - now;
+
+    if (diff <= 0){
+      el.cdwrap.style.display = 'none';
+      el.progress.style.display = 'none';
+      el.unlocked.classList.add('show');
+      el.pill.classList.add('open');
+      el.icon.textContent = '🔓';
+      el.text.textContent = 'Takas Edilebilir';
+      clearInterval(timer);
+      return;
+    }
+
+    const totalSec = Math.floor(diff / 1000);
+    const days  = Math.floor(totalSec / 86400);
+    const hours = Math.floor((totalSec % 86400) / 3600);
+    const mins  = Math.floor((totalSec % 3600) / 60);
+    const secs  = totalSec % 60;
+
+    el.d.textContent = pad(days);
+    el.h.textContent = pad(hours);
+    el.m.textContent = pad(mins);
+    el.s.textContent = pad(secs);
+
+    const total = UNLOCK_AT.getTime() - LOCK_START.getTime();
+    let p = ((now - LOCK_START.getTime()) / total) * 100;
+    p = Math.max(0, Math.min(100, p));
+    el.bar.style.width = p.toFixed(2) + '%';
+    el.pct.textContent = '%' + p.toFixed(1).replace('.', ',');
+  }
+
+  const timer = setInterval(tick, 1000);
+  tick();
+
+  /* ====== KOPYALA ====== */
+  document.querySelectorAll('.copy').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const val = btn.dataset.copy;
+      try{
+        await navigator.clipboard.writeText(val);
+      }catch(e){
+        const t = document.createElement('textarea');
+        t.value = val; document.body.appendChild(t); t.select();
+        document.execCommand('copy'); t.remove();
+      }
+      const old = btn.textContent;
+      btn.textContent = 'kopyalandı ✓';
+      btn.style.color = '#4ade80';
+      setTimeout(() => { btn.textContent = old; btn.style.color = ''; }, 1400);
+    });
+  });
+
+  /* ====== MODAL (FOTOĞRAF) MANTIĞI ====== */
+  const modal = document.getElementById('memeModal');
+  const btnWant = document.getElementById('wantBtn');
+  const closeModal = document.getElementById('closeModal');
+
+  // Butona tıklanınca fotoğrafı aç
+  btnWant.addEventListener('click', () => {
+    modal.classList.add('show');
+  });
+
+  // Çarpıya tıklanınca kapat
+  closeModal.addEventListener('click', () => {
+    modal.classList.remove('show');
+  });
+
+  // Fotoğrafın dışına (siyah alana) tıklanınca kapat
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.classList.remove('show');
+    }
+  });
+
+  // ESC tuşuna basılınca kapat
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('show')) {
+      modal.classList.remove('show');
+    }
+  });
+</script>
+</body>
+</html>
