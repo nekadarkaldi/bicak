@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>★ Takas Kilitli Envanter | CS2</title>
+<title>CS2 Envanter · 6 Bıçak Takas Kilit Durumu</title>
 <style>
   :root{
-    --bg:#0a0d12;
-    --card:#12161f;
-    --card2:#0f141b;
-    --line:#1e2530;
+    --bg:#07090d;
+    --card:#0d1117;
+    --card-inner:#121721;
+    --line:#1c2430;
     --txt:#e7edf5;
     --muted:#8a97a8;
     --gold:#d9a13b;
@@ -17,134 +17,113 @@
     --green:#4ade80;
   }
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0}
-  body{
-    background:
-      radial-gradient(900px 520px at 50% -10%, rgba(217,161,59,.08), transparent 60%),
-      var(--bg);
+  html,body{
+    margin:0;padding:0;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    background: radial-gradient(1200px 800px at 50% 50%, rgba(217,161,59,.06), transparent 70%), var(--bg);
     color:var(--txt);
     font-family:"Segoe UI",Roboto,-apple-system,BlinkMacSystemFont,Arial,sans-serif;
-    min-height:100vh;
+  }
+
+  .main-wrapper{
+    width:100%;
+    height:100vh;
+    padding:24px;
     display:flex;
-    align-items:flex-start;
-    justify-content:center;
-    padding:28px 16px 40px;
-  }
-  /* ince arka plan ızgarası */
-  body::before{
-    content:"";
-    position:fixed;inset:0;pointer-events:none;z-index:0;
-    background-image:
-      linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px);
-    background-size:48px 48px;
-    -webkit-mask-image:radial-gradient(circle at 50% 0%, #000 0%, transparent 78%);
-            mask-image:radial-gradient(circle at 50% 0%, #000 0%, transparent 78%);
+    flex-direction:column;
+    justify-content:center; /* DİKEYDE TAM ORTALA */
+    align-items:center;     /* YATAYDA TAM ORTALA */
+    gap: 20px;
   }
 
-  .wrap{width:100%;max-width:1180px;position:relative;z-index:1}
-
-  /* ---------- ÜST BAŞLIK ---------- */
+  /* ÜST BİLGİ */
   .topbar{
-    display:flex;align-items:center;justify-content:space-between;
-    gap:12px;margin-bottom:18px;flex-wrap:wrap;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    width:100%;
+    max-width:1300px;
+    height:36px;
+    flex-shrink:0;
   }
   .brand{
-    font-size:12px;letter-spacing:.16em;text-transform:uppercase;
-    color:var(--muted);font-weight:700;
-    display:flex;align-items:center;gap:9px;
+    font-size:13px;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+    color:var(--muted);
+    font-weight:700;
   }
   .brand b{color:var(--gold)}
-  .logo-mark{
-    width:26px;height:26px;border-radius:8px;
-    display:grid;place-items:center;font-size:14px;
-    background:linear-gradient(145deg, rgba(217,161,59,.22), rgba(217,161,59,.05));
-    border:1px solid rgba(217,161,59,.35);
-    box-shadow:0 0 18px rgba(217,161,59,.15);
-  }
 
   .lockpill{
-    display:inline-flex;align-items:center;gap:8px;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
     background:rgba(227,93,93,.08);
     border:1px solid rgba(227,93,93,.25);
     color:#ff9b9b;
-    padding:6px 14px;border-radius:999px;
-    font-size:12px;font-weight:700;letter-spacing:.04em;
+    padding:4px 12px;
+    border-radius:999px;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.04em;
     text-transform:uppercase;
-    transition:.35s;
-  }
-  .lockpill.open{
-    background:rgba(74,222,128,.08);
-    border-color:rgba(74,222,128,.30);
-    color:var(--green);
   }
 
-  /* ---------- YERLEŞİM ---------- */
-  .layout{
-    display:grid;
-    grid-template-columns:minmax(0,1fr) 400px;
-    gap:20px;
-    align-items:start;
-  }
-  @media (max-width:1020px){
-    .layout{grid-template-columns:1fr}
-  }
-
-  /* ---------- KART ---------- */
-  .card{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:16px;
-    overflow:hidden;
-    box-shadow:0 20px 40px -15px rgba(0,0,0,.8);
-    animation:rise .5s cubic-bezier(.2,.8,.3,1) both;
-  }
-  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-
-  /* ---------- EŞYA GÖRSEL ALANI (KAFES) ---------- */
-  .hero{
-    position:relative;
-    padding:42px 24px 30px;
-    text-align:center;
-    border-bottom:1px solid var(--line);
-    background: radial-gradient(380px 220px at 50% 42%, rgba(217,161,59,.1), transparent 70%);
-  }
-  .featured-badge{
-    position:absolute;top:14px;left:14px;
-    font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
-    color:var(--gold);
-    background:rgba(217,161,59,.09);
-    border:1px solid rgba(217,161,59,.28);
-    padding:5px 11px;border-radius:999px;
+  /* BIÇAK KARTLARI GRİDİ */
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 14px;
+    align-items: center;
+    width: 100%;
+    max-width: 1300px;
   }
 
+  .knife-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    height: auto;
+  }
+
+  /* KARE KAFES KONTEYNERİ */
   .cage-container {
     position: relative;
-    display: inline-block;
-    margin-bottom: 20px;
-    border-radius: 12px;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.8);
-    border: 2px solid #2a313c;
-    transition:.5s;
+    border: 1px solid #232b38;
+    background: radial-gradient(circle at 50% 50%, rgba(217,161,59,.08), var(--card-inner) 80%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .skin-img {
-    width: 100%;
-    max-width: 320px;
-    display: block;
-    filter: brightness(0.85);
-    transition:.5s;
+    width: 85%;
+    height: 85%;
+    object-fit: contain;
+    filter: brightness(0.9);
+    z-index: 1;
   }
 
+  /* DEMİR PARMAKLIKLAR */
   .cage-bars {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background:
-      repeating-linear-gradient(90deg, transparent, transparent 28px, rgba(10, 12, 16, 0.9) 28px, rgba(10, 12, 16, 0.9) 34px),
-      repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(10, 12, 16, 0.9) 28px, rgba(10, 12, 16, 0.9) 34px);
-    box-shadow: inset 0 0 40px rgba(0,0,0,0.9);
+    background: 
+      repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(5, 7, 10, 0.85) 18px, rgba(5, 7, 10, 0.85) 22px),
+      repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(5, 7, 10, 0.85) 18px, rgba(5, 7, 10, 0.85) 22px);
     z-index: 2;
   }
 
@@ -152,452 +131,306 @@
     position: absolute;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 52px;
+    font-size: 26px;
     z-index: 3;
-    filter: drop-shadow(0 0 15px rgba(0,0,0,0.9));
-    animation: lockPulse 3s infinite;
+    filter: drop-shadow(0 0 8px rgba(0,0,0,0.9));
   }
 
-  @keyframes lockPulse {
-    0%, 100% { transform: translate(-50%, -50%) scale(1); filter: drop-shadow(0 0 10px rgba(255,255,255,0.1)); }
-    50% { transform: translate(-50%, -50%) scale(1.05); filter: drop-shadow(0 0 20px rgba(255,255,255,0.3)); }
+  /* İSİM VE BİLGİ ALANI */
+  .knife-info {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
   }
 
-  /* Kilit açılınca kafes kalkar */
-  .cage-container.open{border-color:rgba(74,222,128,.45); box-shadow:0 15px 30px rgba(0,0,0,.8), 0 0 32px rgba(74,222,128,.25)}
-  .cage-container.open .cage-bars,
-  .cage-container.open .padlock{display:none}
-  .cage-container.open .skin-img{filter:none}
-
-  .itemname{
-    margin:0 0 8px;
-    font-size:clamp(22px,4vw,28px);
-    font-weight:700;
+  .knife-title {
+    font-size: 12px;
+    font-weight: 700;
     color: #fff;
-    letter-spacing:.3px;
+    margin: 0 0 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .subtle{color:var(--muted);font-size:13px;letter-spacing:.05em; font-weight:500;}
-
-  /* ---------- GERİ SAYIM ---------- */
-  .countdownwrap{padding:24px 24px 10px;text-align:center}
-  .cd-label{
-    font-size:11px;letter-spacing:.15em;text-transform:uppercase;
-    color:var(--muted);font-weight:700;margin-bottom:14px;
-  }
-  .countdown{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:10px;
-    max-width:500px;margin:0 auto;
-  }
-  .unit{
-    background:#0d1117;
-    border:1px solid var(--line);
-    border-radius:10px;
-    padding:12px 6px 10px;
-  }
-  .unit .num{
-    font-family:ui-monospace,"SF Mono",Consolas,monospace;
-    font-size:clamp(24px,5vw,32px);
-    font-weight:700;
-    color:#fff;
-    line-height:1;
-  }
-  .unit .lab{
-    margin-top:6px;font-size:10px;letter-spacing:.12em;
-    text-transform:uppercase;color:var(--muted);font-weight:600;
+  .knife-sub {
+    font-size: 10px;
+    color: var(--gold);
+    font-weight: 600;
+    margin: 0 0 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  /* ---------- İLERLEME ÇUBUĞU ---------- */
-  .progress{padding:20px 24px 24px;max-width:540px;margin:0 auto}
-  .bar{
-    height:6px;border-radius:99px;background:#0d1117;
-    border:1px solid var(--line);overflow:hidden;
-  }
-  .bar > i{
-    display:block;height:100%;width:0%;
-    border-radius:99px;
-    background:linear-gradient(90deg,#ff6b6b,#ffc65c,#ffe66d,#6ee79a,#63c4ff);
-    background-size:200% 100%;
-    animation:flow 7s linear infinite;
-    transition:width .6s ease;
-  }
-  @keyframes flow{to{background-position:200% 0}}
-
-  .progress .cap{
-    display:flex;justify-content:space-between;
-    font-size:11px;color:var(--muted);margin-top:8px;
+  .knife-rarity {
+    font-size: 9px;
+    color: var(--red);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    font-weight: 700;
   }
 
-  /* ---------- BİLGİ LİSTESİ ---------- */
-  .info-list {
-    border-top: 1px solid var(--line);
-    background: var(--card2);
-    padding: 8px 24px;
+  /* ALT KISIM - SAYAÇ VE İLERLEME */
+  .bottom-section {
+    flex-shrink: 0;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 24px;
+    max-width: 1300px;
+    width: 100%;
   }
-  .info-row {
+
+  .cd-title {
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .countdown {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+
+  .unit {
+    background: #080a0e;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 8px 18px;
+    text-align: center;
+    min-width: 85px;
+  }
+
+  .unit .num {
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  /* GÜN / SAAT / DAKİKA / SANİYE ETİKETLERİ BÜYÜTÜLDÜ */
+  .unit .lab {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 4px;
+  }
+
+  .bar-wrap {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .bar {
+    height: 6px;
+    border-radius: 99px;
+    background: #080a0e;
+    border: 1px solid var(--line);
+    overflow: hidden;
+  }
+
+  .bar > i {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ff6b6b, #ffc65c, #4ade80);
+    transition: width .6s ease;
+  }
+
+  .bar-cap {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    font-size: 14px;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 6px;
   }
-  .info-row:last-child { border-bottom: none; }
-  .info-row .label { color: var(--muted); font-size: 13px; }
-  .info-row .value {
-    font-weight: 600;
-    color: #e7edf5;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .value.gold { color: var(--gold); }
-  .value.red { color: #ff9b9b; }
-  .value.mono { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
 
-  .copy{
-    background:none;border:1px solid var(--line);color:var(--muted);
-    border-radius:6px;padding:2px 6px;font-size:10px;cursor:pointer;
-    transition:.2s;font-family:inherit;
+  .actions {
+    margin-top: 14px;
+    text-align: center;
   }
-  .copy:hover{border-color:var(--gold);color:var(--gold)}
 
-  /* ---------- ANA AKSİYON ---------- */
-  .actions{
-    display:flex;
-    padding:24px;
-    border-top:1px solid var(--line);
-    background:rgba(0,0,0,0.2);
-  }
   .btn-want {
-    width: 100%;
-    display:inline-flex;align-items:center;justify-content:center;gap:10px;
-    padding:16px 20px;border-radius:10px;
-    font-size:16px;font-weight:800; letter-spacing:0.5px;
-    text-decoration:none;cursor:pointer;border:none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 28px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 800;
+    border: none;
     background: linear-gradient(135deg, #ff4b4b, #cc0000);
     color: white;
-    box-shadow: 0 4px 15px rgba(204, 0, 0, 0.4);
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(204, 0, 0, 0.3);
     transition: .2s;
-    animation: btnPulse 2s infinite;
   }
-  .btn-want:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.15);
-    animation: none;
-  }
-  @keyframes btnPulse {
-    0% { box-shadow: 0 0 0 0 rgba(204, 0, 0, 0.6); }
-    70% { box-shadow: 0 0 0 15px rgba(204, 0, 0, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(204, 0, 0, 0); }
-  }
+  .btn-want:hover { transform: translateY(-1px); filter: brightness(1.1); }
 
-  /* ---------- YAN PANEL ---------- */
-  .side-panel{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:16px;
-    padding:16px;
-    box-shadow:0 20px 40px -15px rgba(0,0,0,.8);
-    position:sticky;
-    top:24px;
-    animation:rise .5s .08s cubic-bezier(.2,.8,.3,1) both;
-  }
-  @media (max-width:1020px){
-    .side-panel{position:static}
-  }
-
-  .side-head{
-    display:flex;align-items:center;justify-content:space-between;
-    font-size:12px;letter-spacing:.14em;text-transform:uppercase;
-    color:var(--muted);font-weight:800;
-  }
-  .count-badge{
-    background:rgba(217,161,59,.12);
-    border:1px solid rgba(217,161,59,.3);
-    color:var(--gold);
-    border-radius:999px;padding:2px 10px;font-size:11px;letter-spacing:0;
-  }
-  .side-sub{font-size:11px;color:var(--muted);margin:7px 0 14px;line-height:1.5}
-  .side-sub b{color:var(--gold);font-weight:700}
-
-  .side-list{display:flex;flex-direction:column;gap:10px}
-
-  .mini{
-    display:flex;gap:12px;align-items:center;
-    background:var(--card2);
-    border:1px solid var(--line);
-    border-radius:12px;
-    padding:10px;
-    cursor:pointer;
-    transition:transform .18s ease, border-color .18s ease, background .18s ease;
-  }
-  .mini:hover{
-    transform:translateX(3px);
-    border-color:rgba(217,161,59,.35);
-    background:#121822;
-  }
-  .mini:hover .chev{color:var(--gold);transform:translateX(2px)}
-
-  .thumb{
-    position:relative;
-    width:64px;height:64px;flex:0 0 64px;
-    border-radius:9px;overflow:hidden;
-    border:1px solid #2a313c;
-    background:#0a0d12;
-    transition:.4s;
-  }
-  .thumb img{width:100%;height:100%;object-fit:cover;filter:brightness(.82);transition:.4s}
-  .thumb .bars{
-    position:absolute;inset:0;pointer-events:none;
-    background:
-      repeating-linear-gradient(90deg, transparent 0 9px, rgba(10,12,16,.88) 9px 11px),
-      repeating-linear-gradient(0deg, transparent 0 9px, rgba(10,12,16,.88) 9px 11px);
-    box-shadow: inset 0 0 16px rgba(0,0,0,.9);
-  }
-  .thumb .lock{
-    position:absolute;inset:0;display:grid;place-items:center;
-    font-size:20px;filter:drop-shadow(0 0 6px #000);
-  }
-  .thumb.noimg::before{
-    content:"🔪";
-    position:absolute;inset:0;display:grid;place-items:center;
-    font-size:26px;
-    background:radial-gradient(circle at 50% 40%, rgba(217,161,59,.16), transparent 70%);
-  }
-  .mini.open .thumb{border-color:rgba(74,222,128,.4)}
-  .mini.open .thumb .bars,
-  .mini.open .thumb .lock{display:none}
-  .mini.open .thumb img{filter:none}
-
-  .meta{min-width:0;flex:1}
-  .meta .nm{
-    font-size:12.5px;font-weight:700;color:#fff;
-    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  }
-  .meta .rr{font-size:10.5px;color:#ff9b9b;margin-top:2px}
-  .meta .cd{
-    font-family:ui-monospace,"SF Mono",Consolas,monospace;
-    font-size:11.5px;color:var(--gold);margin-top:7px;letter-spacing:.3px;
-  }
-  .mini.open .cd{color:var(--green)}
-  .mini-bar{height:3px;border-radius:99px;background:#0d1117;overflow:hidden;margin-top:6px}
-  .mini-bar > i{
-    display:block;height:100%;width:0;
-    border-radius:99px;
-    background:linear-gradient(90deg,#ff6b6b,#ffc65c,#6ee79a);
-    transition:width .6s ease;
-  }
-
-  .chev{
-    color:var(--muted);font-size:18px;line-height:1;
-    transition:.18s;flex:0 0 auto;
-  }
-
-  /* ---------- NOT ---------- */
-  .note{
-    margin-top:18px;font-size:12px;line-height:1.7;
-    color:var(--muted);text-align:center;
-  }
-  .note code{
-    background:#0d1117;border:1px solid var(--line);
-    padding:2px 6px;border-radius:4px;color:#c7d2e0;
-  }
-
-  /* ---------- AÇILDI MESAJI ---------- */
-  .unlocked-msg{display:none;padding:24px;text-align:center}
-  .unlocked-msg.show{display:block}
-  .unlocked-msg .big{
-    font-size:20px;font-weight:700;color:var(--green);
-  }
-
-  /* ---------- MODAL ---------- */
+  /* MODAL */
   .modal {
     display: none;
     position: fixed;
     z-index: 9999;
-    left: 0; top: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(5px);
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(4px);
     align-items: center;
     justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
   }
-  .modal.show { display: flex; opacity: 1; }
+  .modal.show { display: flex; }
   .modal-content {
     position: relative;
-    max-width: 90%;
-    max-height: 90vh;
-    animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    max-width: 400px;
+    width: 90%;
   }
-  @keyframes zoomIn {
-    from { transform: scale(0.5); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-  }
-  .modal-content img {
-    width: 100%;
-    max-width: 500px;
-    border-radius: 12px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.9);
-    border: 3px solid #2a313c;
-    display:block;
-  }
+  .modal-content img { width: 100%; border-radius: 8px; border: 2px solid var(--line); }
   .close-btn {
     position: absolute;
-    top: -45px;
-    right: 0;
-    color: #fff;
-    font-size: 36px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s;
-    line-height: 1;
-  }
-  .close-btn:hover { color: var(--red); }
-
-  @media (max-width:600px){
-    .info-row { flex-direction: column; align-items: flex-start; gap: 4px; }
-    .info-row .value { width: 100%; justify-content: space-between; }
-    .countdown{gap:6px}
-    .unit{padding:10px 4px}
-    .cage-container { max-width: 90%; }
-    .skin-img { max-width: 100%; }
-    .hero{padding:38px 16px 26px}
+    top: -30px; right: 0;
+    color: #fff; font-size: 24px; cursor: pointer;
   }
 </style>
 </head>
 <body>
-<div class="wrap">
 
+<div class="main-wrapper">
+
+  <!-- ÜST BAŞLIK -->
   <div class="topbar">
-    <div class="brand"><span class="logo-mark">🔪</span> CS2 Envanter · <b>Takas Durumu</b></div>
-    <div class="lockpill" id="lockpill">
-      <span id="lockicon">🔒</span>
-      <span id="locktext">Eşyalar Kilitli</span>
+    <div class="brand">CS2 ENVANTER · <b>6 BIÇAK TAKAS DURUMU</b></div>
+    <div class="lockpill">
+      <span>🔒</span>
+      <span>TAKAS KORUMALI</span>
     </div>
   </div>
 
-  <div class="layout">
-
-    <!-- ================= ANA EŞYA ================= -->
-    <main class="col-main">
-      <div class="card">
-
-        <div class="hero">
-          <div class="featured-badge">★ Öne Çıkan</div>
-
-          <div class="cage-container" id="mainCage">
-            <img src="https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpovbSsLQJf2ObDYzR97dGJjoWJhfbLP7LWnn8fvZIgjrGYpo-m3wbmqBU6NmmmLYaTIQFqMAzR8gfrx-rs1JK77pWdmmwj5HfC17GeYA" alt="★ Kukri Bıçağı | Solgun" class="skin-img">
-            <div class="cage-bars"></div>
-            <div class="padlock">🔒</div>
-          </div>
-
-          <h1 class="itemname">★ Kukri Bıçağı | Solgun</h1>
-          <div class="subtle">Counter-Strike 2 · Çok Gizli Bıçak</div>
-        </div>
-
-        <!-- GERİ SAYIM -->
-        <div class="countdownwrap" id="cdwrap">
-          <div class="cd-label">Takas kilidinin açılmasına kalan süre</div>
-          <div class="countdown">
-            <div class="unit"><div class="num" id="d">--</div><div class="lab">Gün</div></div>
-            <div class="unit"><div class="num" id="h">--</div><div class="lab">Saat</div></div>
-            <div class="unit"><div class="num" id="m">--</div><div class="lab">Dakika</div></div>
-            <div class="unit"><div class="num" id="s">--</div><div class="lab">Saniye</div></div>
-          </div>
-        </div>
-
-        <!-- AÇILDI MESAJI -->
-        <div class="unlocked-msg" id="unlockedMsg">
-          <div class="big">✅ Kilit Açıldı — Artık Takas Edilebilir</div>
-          <div class="subtle" style="margin-top:6px">Bu eşya üzerindeki takas kısıtlaması kalktı.</div>
-        </div>
-
-        <!-- İLERLEME -->
-        <div class="progress" id="progressWrap">
-          <div class="bar"><i id="bar"></i></div>
-          <div class="cap">
-            <span>Kilit başlangıcı</span>
-            <span id="pct">%0</span>
-            <span>Kilit bitişi</span>
-          </div>
-        </div>
-
-        <!-- DETAY LİSTESİ -->
-        <div class="info-list">
-          <div class="info-row">
-            <span class="label">Eşya</span>
-            <span class="value gold">★ Kukri Bıçağı | Solgun</span>
-          </div>
-          <div class="info-row">
-            <span class="label">Nadirlik</span>
-            <span class="value red">★ Çok Gizli Bıçak</span>
-          </div>
-          <div class="info-row">
-            <span class="label">Dış Görünüm</span>
-            <span class="value">Fabrikadan Yeni Çıkmış</span>
-          </div>
-          <div class="info-row">
-            <span class="label">Aşınma (Float)</span>
-            <span class="value mono">0,013237278
-              <button class="copy" data-copy="0.013237278">kopyala</button>
-            </span>
-          </div>
-          <div class="info-row">
-            <span class="label">Kalıp Şablonu</span>
-            <span class="value mono">561
-              <button class="copy" data-copy="561">kopyala</button>
-            </span>
-          </div>
-          <div class="info-row">
-            <span class="label">Koleksiyon</span>
-            <span class="value">Kilovat Koleksiyonu</span>
-          </div>
-          <div class="info-row">
-            <span class="label">Takas Kilit Bitişi</span>
-            <span class="value gold">29.10.2026 · 04:00</span>
-          </div>
-          <div class="info-row">
-            <span class="label">Durum</span>
-            <span class="value red">Takas Edilemez · Pazarlanamaz</span>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button class="btn-want" id="wantBtn">
-            🔥 BEN HEMEN İSTİYORUM
-          </button>
-        </div>
+  <!-- BIÇAKLAR GRİD (6 ADET YAN YANA) -->
+  <div class="grid-container">
+    
+    <!-- 1. Bıçak -->
+    <div class="knife-card">
+      <div class="cage-container">
+        <img src="https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpovbSsLQJf2ObDYzR97dGJjoWJhfbLP7LWnn8fvZIgjrGYpo-m3wbmqBU6NmmmLYaTIQFqMAzR8gfrx-rs1JK77pWdmmwj5HfC17GeYA" class="skin-img" alt="Kukri Bıçağı">
+        <div class="cage-bars"></div>
+        <div class="padlock">🔒</div>
       </div>
-    </main>
-
-    <!-- ================= YAN PANEL ================= -->
-    <aside class="col-side">
-      <div class="side-panel">
-        <div class="side-head">
-          <span>Diğer Eşyalar</span>
-          <span class="count-badge" id="sideCount">5</span>
-        </div>
-        <div class="side-sub">
-          Hepsi <b>28.10.2026 · 04:00</b>'da takasa açılıyor
-        </div>
-        <div class="side-list" id="sideList"></div>
+      <div class="knife-info">
+        <div class="knife-title">★ Kukri Bıçağı</div>
+        <div class="knife-sub">Solgun</div>
+        <div class="knife-rarity">ÇOK GİZLİ</div>
       </div>
-    </aside>
+    </div>
+
+    <!-- 2. Bıçak -->
+    <div class="knife-card">
+      <div class="cage-container">
+        <img src="https://media.discordapp.net/attachments/1487637709164908696/1563297624193241118/222.png?ex=6add1dde&is=6adbcc5e&hm=1e409c7adb53653700988e54c7a4447209c67429737ad9c5e9b4370c2e8a0add&=&format=webp&quality=lossless" class="skin-img" alt="Kelebek Bıçağı">
+        <div class="cage-bars"></div>
+        <div class="padlock">🔒</div>
+      </div>
+      <div class="knife-info">
+        <div class="knife-title">★ Kelebek Bıçağı</div>
+        <div class="knife-sub">Mermer Solgun</div>
+        <div class="knife-rarity">ÇOK GİZLİ</div>
+      </div>
+    </div>
+
+    <!-- 3. Bıçak -->
+    <div class="knife-card">
+      <div class="cage-container">
+        <img src="https://media.discordapp.net/attachments/1487637709164908696/1563297624537178263/3333.png?ex=6add1dde&is=6adbcc5e&hm=8575debee1f1679d46dc6202788cb84f406243250306d66984e24b6bee3d4304&=&format=webp&quality=lossless" class="skin-img" alt="M9 Kasatura">
+        <div class="cage-bars"></div>
+        <div class="padlock">🔒</div>
+      </div>
+      <div class="knife-info">
+        <div class="knife-title">★ M9 Kasatura</div>
+        <div class="knife-sub">Kaplan Dişi</div>
+        <div class="knife-rarity">ÇOK GİZLİ</div>
+      </div>
+    </div>
+
+    <!-- 4. Bıçak -->
+    <div class="knife-card">
+      <div class="cage-container">
+        <img src="https://media.discordapp.net/attachments/1487637709164908696/1563297624927506502/4444.png?ex=6add1dde&is=6adbcc5e&hm=d7e2bf47b21489d6368e25928e32d24aea81eac74d624720e12125e3c30f8139&=&format=webp&quality=lossless" class="skin-img" alt="İskelet Bıçak">
+        <div class="cage-bars"></div>
+        <div class="padlock">🔒</div>
+      </div>
+      <div class="knife-info">
+        <div class="knife-title">★ İskelet Bıçak</div>
+        <div class="knife-sub">Otomatikleşme</div>
+        <div class="knife-rarity">ÇOK GİZLİ</div>
+      </div>
+    </div>
+
+    <!-- 5. Bıçak -->
+    <div class="knife-card">
+      <div class="cage-container">
+        <img src="https://media.discordapp.net/attachments/1487637709164908696/1563297625246142564/5555.png?ex=6add1dde&is=6adbcc5e&hm=1df38cfca1c58990a7a7af3db272c2f1da10280fee9564ffefa278b0135522d9&=&format=webp&quality=lossless" class="skin-img" alt="Kukri Bıçağı #2">
+        <div class="cage-bars"></div>
+        <div class="padlock">🔒</div>
+      </div>
+      <div class="knife-info">
+        <div class="knife-title">★ Kukri Bıçağı</div>
+        <div class="knife-sub">Solgun #2</div>
+        <div class="knife-rarity">ÇOK GİZLİ</div>
+      </div>
+    </div>
+
+    <!-- 6. Bıçak -->
+    <div class="knife-card">
+      <div class="cage-container">
+        <img src="https://media.discordapp.net/attachments/1487637709164908696/1563297638575513652/1111.png?ex=6add1de1&is=6adbcc61&hm=c4f7aa0c0eed20db76f728c31c62dfbc091ae901552610a770801247672d95eb&=&format=webp&quality=lossless" class="skin-img" alt="Karambit">
+        <div class="cage-bars"></div>
+        <div class="padlock">🔒</div>
+      </div>
+      <div class="knife-info">
+        <div class="knife-title">★ Karambit</div>
+        <div class="knife-sub">Solgun</div>
+        <div class="knife-rarity">ÇOK GİZLİ</div>
+      </div>
+    </div>
 
   </div>
 
-  <p class="note">
-    Ana eşya: <code>29.10.2026 04:00:00</code> · Yan paneldeki eşyalar: <code>28.10.2026 04:00:00</code> —
-    Bu tarihe kadar eşyalar tüketilemez, değiştirilemez veya transfer edilemez.
-  </p>
+  <!-- ALT SAYAÇ VE İLERLEME -->
+  <div class="bottom-section">
+    <div class="cd-title">TÜM EŞYALARIN TAKAS KİLİDİ BİTİŞİ: 28 EKİM 2026 · 04:00</div>
+    
+    <div class="countdown">
+      <div class="unit"><div class="num" id="d">--</div><div class="lab">Gün</div></div>
+      <div class="unit"><div class="num" id="h">--</div><div class="lab">Saat</div></div>
+      <div class="unit"><div class="num" id="m">--</div><div class="lab">Dakika</div></div>
+      <div class="unit"><div class="num" id="s">--</div><div class="lab">Saniye</div></div>
+    </div>
+
+    <div class="bar-wrap">
+      <div class="bar"><i id="bar"></i></div>
+      <div class="bar-cap">
+        <span>Kilit Başlangıcı</span>
+        <span id="pct">%0</span>
+        <span>28 Ekim 04:00</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn-want" id="wantBtn">🔥 HEMEN İSTİYORUM</button>
+    </div>
+  </div>
+
 </div>
 
-<!-- FOTOĞRAF MODALI -->
+<!-- MODAL -->
 <div class="modal" id="memeModal">
   <div class="modal-content">
     <span class="close-btn" id="closeModal">&times;</span>
@@ -606,24 +439,9 @@
 </div>
 
 <script>
-  /* ================= AYARLAR ================= */
-  // ⬇️ YAN PANELDEKİ EŞYALAR — görselleri kendi dosya yolu / URL'lerinle değiştir
-  const SIDE_ITEMS = [
-    { name:'★ Bayonet | Orman DDPAT',         rarity:'Çok Gizli Bıçak', img:'img/bayonet.png' },
-    { name:'★ Gölge Hançerleri | Safari Ağı', rarity:'Çok Gizli Bıçak', img:'img/shadow-daggers.png' },
-    { name:'★ Avcı Bıçağı | Kaplan Dişi',     rarity:'Çok Gizli Bıçak', img:'img/huntsman.png' },
-    { name:'★ Göçebe Bıçağı | Kızıl Ağ',      rarity:'Çok Gizli Bıçak', img:'img/nomad.png' },
-    { name:'★ Pençe Bıçağı | Kızıl Ağ',       rarity:'Çok Gizli Bıçak', img:'img/talon.png' }
-  ];
-  const SIDE_UNLOCK = new Date(2026, 9, 28, 4, 0, 0); // 28 Ekim 2026 04:00
-
-  /* ================= ANA EŞYA TARİHLERİ ================= */
-  const UNLOCK_MAIN = new Date(2026, 9, 29, 4, 0, 0);   // 29 Ekim 2026 04:00
-  const LOCK_START_MAIN = new Date(UNLOCK_MAIN.getTime() - 7 * 24 * 60 * 60 * 1000);
-  const LOCK_SPAN = 7 * 24 * 60 * 60 * 1000;
-  const LOCK_START_SIDE = new Date(SIDE_UNLOCK.getTime() - LOCK_SPAN);
-
-  const pad = n => String(n).padStart(2, '0');
+  // 28 Ekim 2026 Saat 04:00:00
+  const UNLOCK_AT = new Date(2026, 9, 28, 4, 0, 0);   
+  const LOCK_START = new Date(UNLOCK_AT.getTime() - 7 * 24 * 60 * 60 * 1000); 
 
   const el = {
     d: document.getElementById('d'),
@@ -631,167 +449,51 @@
     m: document.getElementById('m'),
     s: document.getElementById('s'),
     bar: document.getElementById('bar'),
-    pct: document.getElementById('pct'),
-    pill: document.getElementById('lockpill'),
-    icon: document.getElementById('lockicon'),
-    text: document.getElementById('locktext'),
-    cdwrap: document.getElementById('cdwrap'),
-    progress: document.getElementById('progressWrap'),
-    unlocked: document.getElementById('unlockedMsg'),
-    cage: document.getElementById('mainCage')
+    pct: document.getElementById('pct')
   };
 
-  /* ================= YAN PANELİ OLUŞTUR ================= */
-  const sideList = document.getElementById('sideList');
-  const minis = [];
-
-  SIDE_ITEMS.forEach(item => {
-    const card = document.createElement('div');
-    card.className = 'mini';
-    card.innerHTML = `
-      <div class="thumb">
-        <img src="${item.img}" alt="${item.name}"
-             onerror="this.parentNode.classList.add('noimg');this.remove();">
-        <div class="bars"></div>
-        <div class="lock">🔒</div>
-      </div>
-      <div class="meta">
-        <div class="nm">${item.name}</div>
-        <div class="rr">${item.rarity}</div>
-        <div class="cd">--</div>
-        <div class="mini-bar"><i></i></div>
-      </div>
-      <div class="chev">›</div>
-    `;
-    sideList.appendChild(card);
-
-    const mini = {
-      node: card,
-      cdEl: card.querySelector('.cd'),
-      barEl: card.querySelector('.mini-bar > i'),
-      unlock: SIDE_UNLOCK.getTime(),
-      start: LOCK_START_SIDE.getTime(),
-      done: false
-    };
-    minis.push(mini);
-
-    card.addEventListener('click', openModal);
-  });
-
-  document.getElementById('sideCount').textContent = SIDE_ITEMS.length;
-
-  /* ================= GERİ SAYIM DÖNGÜSÜ ================= */
-  let mainDone = false;
+  const pad = n => String(n).padStart(2, '0');
 
   function tick(){
     const now = Date.now();
-    let lockedCount = 0;
-
-    /* ---- ANA EŞYA ---- */
-    const diff = UNLOCK_MAIN.getTime() - now;
+    const diff = UNLOCK_AT.getTime() - now;
 
     if (diff <= 0){
-      if (!mainDone){
-        mainDone = true;
-        el.cdwrap.style.display = 'none';
-        el.progress.style.display = 'none';
-        el.unlocked.classList.add('show');
-        el.cage.classList.add('open');
-      }
-    } else {
-      lockedCount++;
-
-      const totalSec = Math.floor(diff / 1000);
-      el.d.textContent = pad(Math.floor(totalSec / 86400));
-      el.h.textContent = pad(Math.floor((totalSec % 86400) / 3600));
-      el.m.textContent = pad(Math.floor((totalSec % 3600) / 60));
-      el.s.textContent = pad(totalSec % 60);
-
-      let p = ((now - LOCK_START_MAIN.getTime()) / LOCK_SPAN) * 100;
-      p = Math.max(0, Math.min(100, p));
-      el.bar.style.width = p.toFixed(2) + '%';
-      el.pct.textContent = '%' + p.toFixed(1).replace('.', ',');
+      el.d.textContent = '00';
+      el.h.textContent = '00';
+      el.m.textContent = '00';
+      el.s.textContent = '00';
+      el.bar.style.width = '100%';
+      el.pct.textContent = '%100';
+      return;
     }
 
-    /* ---- YAN PANEL EŞYALARI ---- */
-    minis.forEach(m => {
-      const d = m.unlock - now;
+    const totalSec = Math.floor(diff / 1000);
+    const days  = Math.floor(totalSec / 86400);
+    const hours = Math.floor((totalSec % 86400) / 3600);
+    const mins  = Math.floor((totalSec % 3600) / 60);
+    const secs  = totalSec % 60;
 
-      if (d <= 0){
-        if (!m.done){
-          m.done = true;
-          m.node.classList.add('open');
-          m.cdEl.textContent = 'Takas Edilebilir';
-          m.barEl.style.width = '100%';
-        }
-        return;
-      }
+    el.d.textContent = pad(days);
+    el.h.textContent = pad(hours);
+    el.m.textContent = pad(mins);
+    el.s.textContent = pad(secs);
 
-      lockedCount++;
-
-      const t = Math.floor(d / 1000);
-      m.cdEl.textContent =
-        Math.floor(t / 86400) + 'g ' +
-        pad(Math.floor((t % 86400) / 3600)) + ':' +
-        pad(Math.floor((t % 3600) / 60)) + ':' +
-        pad(t % 60);
-
-      let p = ((now - m.start) / LOCK_SPAN) * 100;
-      p = Math.max(0, Math.min(100, p));
-      m.barEl.style.width = p.toFixed(2) + '%';
-    });
-
-    /* ---- ÜST ROZET ---- */
-    if (lockedCount === 0){
-      el.pill.classList.add('open');
-      el.icon.textContent = '🔓';
-      el.text.textContent = 'Tümü Takas Edilebilir';
-    } else {
-      el.pill.classList.remove('open');
-      el.icon.textContent = '🔒';
-      el.text.textContent = lockedCount + ' Eşya Kilitli';
-    }
+    const total = UNLOCK_AT.getTime() - LOCK_START.getTime();
+    let p = ((now - LOCK_START.getTime()) / total) * 100;
+    p = Math.max(0, Math.min(100, p));
+    el.bar.style.width = p.toFixed(2) + '%';
+    el.pct.textContent = '%' + p.toFixed(1).replace('.', ',');
   }
 
-  tick();
   setInterval(tick, 1000);
+  tick();
 
-  /* ================= KOPYALA ================= */
-  document.querySelectorAll('.copy').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const val = btn.dataset.copy;
-      try{
-        await navigator.clipboard.writeText(val);
-      }catch(e){
-        const t = document.createElement('textarea');
-        t.value = val; document.body.appendChild(t); t.select();
-        document.execCommand('copy'); t.remove();
-      }
-      const old = btn.textContent;
-      btn.textContent = 'kopyalandı ✓';
-      btn.style.color = '#4ade80';
-      setTimeout(() => { btn.textContent = old; btn.style.color = ''; }, 1400);
-    });
-  });
-
-  /* ================= MODAL ================= */
+  /* Modal */
   const modal = document.getElementById('memeModal');
-  const closeModal = document.getElementById('closeModal');
-
-  function openModal(){ modal.classList.add('show'); }
-
-  document.getElementById('wantBtn').addEventListener('click', openModal);
-  closeModal.addEventListener('click', () => modal.classList.remove('show'));
-
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) modal.classList.remove('show');
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.classList.contains('show')) {
-      modal.classList.remove('show');
-    }
-  });
+  document.getElementById('wantBtn').addEventListener('click', () => modal.classList.add('show'));
+  document.getElementById('closeModal').addEventListener('click', () => modal.classList.remove('show'));
+  modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('show'); });
 </script>
 </body>
 </html>
