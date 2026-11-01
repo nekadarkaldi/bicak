@@ -3,497 +3,110 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CS2 Envanter · 6 Bıçak Takas Kilit Durumu</title>
+<title>Ödeme Sayacı</title>
 <style>
-  :root{
-    --bg:#07090d;
-    --card:#0d1117;
-    --card-inner:#121721;
-    --line:#1c2430;
-    --txt:#e7edf5;
-    --muted:#8a97a8;
-    --gold:#d9a13b;
-    --red:#e35d5d;
-    --green:#4ade80;
+  :root { --bg:#12151a; --panel:#1b1f26; --line:#2b313b; --ct:#6b9bd1; --t:#eabe54; --text:#e9edf2; --mute:#8b95a3; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 16px;
+    font-family: "Segoe UI", system-ui, sans-serif; color: var(--text);
+    background: radial-gradient(ellipse at 50% 0%, #1f2a3a, var(--bg) 65%);
   }
-  *{box-sizing:border-box}
-  html,body{
-    margin:0;padding:0;
-    width:100vw;
-    height:100vh;
-    overflow:hidden;
-    background: radial-gradient(1200px 800px at 50% 50%, rgba(217,161,59,.06), transparent 70%), var(--bg);
-    color:var(--txt);
-    font-family:"Segoe UI",Roboto,-apple-system,BlinkMacSystemFont,Arial,sans-serif;
+  .card {
+    width: min(94vw, 520px); padding: 32px 24px; text-align: center;
+    background: var(--panel); border: 1px solid var(--line); border-top: 3px solid var(--t);
+    border-radius: 6px; box-shadow: 0 16px 50px rgba(0,0,0,.5);
+    animation: in .6s ease both;
   }
+  @keyframes in { from { opacity: 0; transform: translateY(14px); } }
+  .label { font-size: .8rem; letter-spacing: 3px; color: var(--mute); text-transform: uppercase; }
+  .amount {
+    font-size: clamp(2.6rem, 12vw, 4rem); font-weight: 800; color: var(--t);
+    margin: 6px 0 24px; text-shadow: 0 0 24px rgba(234,190,84,.35);
+  }
+  .timer { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 26px; }
+  .box { background: var(--bg); border: 1px solid var(--line); border-bottom: 3px solid var(--ct); border-radius: 4px; padding: 12px 2px; }
+  .box span { display: block; font-size: clamp(1.6rem, 8vw, 2.4rem); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .box small { color: var(--mute); font-size: .7rem; letter-spacing: 2px; text-transform: uppercase; }
+  .box.tick span { animation: pop .3s; }
+  @keyframes pop { 50% { transform: scale(1.15); color: var(--ct); } }
+  .done { display: none; color: var(--t); font-weight: 700; margin-bottom: 18px; }
+  button {
+    cursor: pointer; border: 0; border-radius: 4px; padding: 13px 30px;
+    font-size: 1rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    background: var(--t); color: #1a1a1a; transition: .15s;
+  }
+  button:hover { background: #f5cf6b; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(234,190,84,.35); }
+  button:active { transform: translateY(0); }
 
-  .main-wrapper{
-    width:100%;
-    height:100vh;
-    padding:24px;
-    display:flex;
-    flex-direction:column;
-    justify-content:center; /* DİKEYDE TAM ORTALA */
-    align-items:center;     /* YATAYDA TAM ORTALA */
-    gap: 20px;
+  .overlay { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,.75); z-index: 10; }
+  .overlay.show { display: flex; animation: fade .2s; }
+  @keyframes fade { from { opacity: 0; } }
+  .popup {
+    text-align: center; padding: 26px 36px 28px; background: var(--panel);
+    border: 1px solid var(--line); border-top: 3px solid var(--ct); border-radius: 6px;
+    animation: boing .45s cubic-bezier(.2,2,.4,1);
   }
-
-  /* ÜST BİLGİ */
-  .topbar{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    width:100%;
-    max-width:1300px;
-    height:36px;
-    flex-shrink:0;
-  }
-  .brand{
-    font-size:13px;
-    letter-spacing:.15em;
-    text-transform:uppercase;
-    color:var(--muted);
-    font-weight:700;
-  }
-  .brand b{color:var(--gold)}
-
-  .lockpill{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    background:rgba(227,93,93,.08);
-    border:1px solid rgba(227,93,93,.25);
-    color:#ff9b9b;
-    padding:4px 12px;
-    border-radius:999px;
-    font-size:11px;
-    font-weight:700;
-    letter-spacing:.04em;
-    text-transform:uppercase;
-  }
-
-  /* BIÇAK KARTLARI GRİDİ */
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 14px;
-    align-items: center;
-    width: 100%;
-    max-width: 1300px;
-  }
-
-  .knife-card {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-    height: auto;
-  }
-
-  /* KARE KAFES KONTEYNERİ */
-  .cage-container {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid #232b38;
-    background: radial-gradient(circle at 50% 50%, rgba(217,161,59,.08), var(--card-inner) 80%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .skin-img {
-    width: 85%;
-    height: 85%;
-    object-fit: contain;
-    filter: brightness(0.9);
-    z-index: 1;
-  }
-
-  /* DEMİR PARMAKLIKLAR */
-  .cage-bars {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: 
-      repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(5, 7, 10, 0.85) 18px, rgba(5, 7, 10, 0.85) 22px),
-      repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(5, 7, 10, 0.85) 18px, rgba(5, 7, 10, 0.85) 22px);
-    z-index: 2;
-  }
-
-  .padlock {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 26px;
-    z-index: 3;
-    filter: drop-shadow(0 0 8px rgba(0,0,0,0.9));
-  }
-
-  /* İSİM VE BİLGİ ALANI */
-  .knife-info {
-    width: 100%;
-    text-align: center;
-    margin-top: 10px;
-  }
-
-  .knife-title {
-    font-size: 12px;
-    font-weight: 700;
-    color: #fff;
-    margin: 0 0 2px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .knife-sub {
-    font-size: 10px;
-    color: var(--gold);
-    font-weight: 600;
-    margin: 0 0 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .knife-rarity {
-    font-size: 9px;
-    color: var(--red);
-    text-transform: uppercase;
-    letter-spacing: .05em;
-    font-weight: 700;
-  }
-
-  /* ALT KISIM - SAYAÇ VE İLERLEME */
-  .bottom-section {
-    flex-shrink: 0;
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 18px 24px;
-    max-width: 1300px;
-    width: 100%;
-  }
-
-  .cd-title {
-    text-align: center;
-    font-size: 12px;
-    letter-spacing: .15em;
-    text-transform: uppercase;
-    color: var(--muted);
-    font-weight: 700;
-    margin-bottom: 12px;
-  }
-
-  .countdown {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    margin-bottom: 14px;
-  }
-
-  .unit {
-    background: #080a0e;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 8px 18px;
-    text-align: center;
-    min-width: 85px;
-  }
-
-  .unit .num {
-    font-family: ui-monospace, Consolas, monospace;
-    font-size: 24px;
-    font-weight: 700;
-    color: #fff;
-  }
-
-  /* GÜN / SAAT / DAKİKA / SANİYE ETİKETLERİ BÜYÜTÜLDÜ */
-  .unit .lab {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-top: 4px;
-  }
-
-  .bar-wrap {
-    max-width: 600px;
-    margin: 0 auto;
-  }
-
-  .bar {
-    height: 6px;
-    border-radius: 99px;
-    background: #080a0e;
-    border: 1px solid var(--line);
-    overflow: hidden;
-  }
-
-  .bar > i {
-    display: block;
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, #ff6b6b, #ffc65c, #4ade80);
-    transition: width .6s ease;
-  }
-
-  .bar-cap {
-    display: flex;
-    justify-content: space-between;
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: 6px;
-  }
-
-  .actions {
-    margin-top: 14px;
-    text-align: center;
-  }
-
-  .btn-want {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 28px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 800;
-    border: none;
-    background: linear-gradient(135deg, #ff4b4b, #cc0000);
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(204, 0, 0, 0.3);
-    transition: .2s;
-  }
-  .btn-want:hover { transform: translateY(-1px); filter: brightness(1.1); }
-
-  /* MODAL */
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 9999;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    backdrop-filter: blur(4px);
-    align-items: center;
-    justify-content: center;
-  }
-  .modal.show { display: flex; }
-  .modal-content {
-    position: relative;
-    max-width: 400px;
-    width: 90%;
-  }
-  .modal-content img { width: 100%; border-radius: 8px; border: 2px solid var(--line); }
-  .close-btn {
-    position: absolute;
-    top: -30px; right: 0;
-    color: #fff; font-size: 24px; cursor: pointer;
-  }
+  @keyframes boing { from { transform: scale(.3); } }
+  .finger { display: block; font-size: clamp(5.5rem, 26vw, 8.5rem); animation: wag .45s infinite alternate; }
+  @keyframes wag { to { transform: translateY(-10px) rotate(7deg); } }
+  .popup p { color: var(--mute); margin: 4px 0 18px; }
+  .popup button { background: var(--ct); color: #0d1218; padding: 10px 26px; }
+  .popup button:hover { background: #8bb4e0; box-shadow: 0 6px 20px rgba(107,155,209,.35); }
 </style>
 </head>
 <body>
+<div class="card">
+  <div class="label">Toplam ödeme</div>
+  <div class="amount">15.900 TL</div>
 
-<div class="main-wrapper">
-
-  <!-- ÜST BAŞLIK -->
-  <div class="topbar">
-    <div class="brand">CS2 ENVANTER · <b>6 BIÇAK TAKAS DURUMU</b></div>
-    <div class="lockpill">
-      <span>🔒</span>
-      <span>TAKAS KORUMALI</span>
-    </div>
+  <div class="timer">
+    <div class="box"><span id="d">00</span><small>Gün</small></div>
+    <div class="box"><span id="h">00</span><small>Saat</small></div>
+    <div class="box"><span id="m">00</span><small>Dk</small></div>
+    <div class="box"><span id="s">00</span><small>Sn</small></div>
   </div>
 
-  <!-- BIÇAKLAR GRİD (6 ADET YAN YANA) -->
-  <div class="grid-container">
-    
-    <!-- 1. Bıçak -->
-    <div class="knife-card">
-      <div class="cage-container">
-        <img src="https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpovbSsLQJf2ObDYzR97dGJjoWJhfbLP7LWnn8fvZIgjrGYpo-m3wbmqBU6NmmmLYaTIQFqMAzR8gfrx-rs1JK77pWdmmwj5HfC17GeYA" class="skin-img" alt="Kukri Bıçağı">
-        <div class="cage-bars"></div>
-        <div class="padlock">🔒</div>
-      </div>
-      <div class="knife-info">
-        <div class="knife-title">★ Kukri Bıçağı</div>
-        <div class="knife-sub">Solgun</div>
-        <div class="knife-rarity">ÇOK GİZLİ</div>
-      </div>
-    </div>
-
-    <!-- 2. Bıçak -->
-    <div class="knife-card">
-      <div class="cage-container">
-        <img src="https://media.discordapp.net/attachments/1487637709164908696/1563297624193241118/222.png?ex=6add1dde&is=6adbcc5e&hm=1e409c7adb53653700988e54c7a4447209c67429737ad9c5e9b4370c2e8a0add&=&format=webp&quality=lossless" class="skin-img" alt="Kelebek Bıçağı">
-        <div class="cage-bars"></div>
-        <div class="padlock">🔒</div>
-      </div>
-      <div class="knife-info">
-        <div class="knife-title">★ Kelebek Bıçağı</div>
-        <div class="knife-sub">Mermer Solgun</div>
-        <div class="knife-rarity">ÇOK GİZLİ</div>
-      </div>
-    </div>
-
-    <!-- 3. Bıçak -->
-    <div class="knife-card">
-      <div class="cage-container">
-        <img src="https://media.discordapp.net/attachments/1487637709164908696/1563297624537178263/3333.png?ex=6add1dde&is=6adbcc5e&hm=8575debee1f1679d46dc6202788cb84f406243250306d66984e24b6bee3d4304&=&format=webp&quality=lossless" class="skin-img" alt="M9 Kasatura">
-        <div class="cage-bars"></div>
-        <div class="padlock">🔒</div>
-      </div>
-      <div class="knife-info">
-        <div class="knife-title">★ M9 Kasatura</div>
-        <div class="knife-sub">Kaplan Dişi</div>
-        <div class="knife-rarity">ÇOK GİZLİ</div>
-      </div>
-    </div>
-
-    <!-- 4. Bıçak -->
-    <div class="knife-card">
-      <div class="cage-container">
-        <img src="https://media.discordapp.net/attachments/1487637709164908696/1563297624927506502/4444.png?ex=6add1dde&is=6adbcc5e&hm=d7e2bf47b21489d6368e25928e32d24aea81eac74d624720e12125e3c30f8139&=&format=webp&quality=lossless" class="skin-img" alt="İskelet Bıçak">
-        <div class="cage-bars"></div>
-        <div class="padlock">🔒</div>
-      </div>
-      <div class="knife-info">
-        <div class="knife-title">★ İskelet Bıçak</div>
-        <div class="knife-sub">Otomatikleşme</div>
-        <div class="knife-rarity">ÇOK GİZLİ</div>
-      </div>
-    </div>
-
-    <!-- 5. Bıçak -->
-    <div class="knife-card">
-      <div class="cage-container">
-        <img src="https://media.discordapp.net/attachments/1487637709164908696/1563297625246142564/5555.png?ex=6add1dde&is=6adbcc5e&hm=1df38cfca1c58990a7a7af3db272c2f1da10280fee9564ffefa278b0135522d9&=&format=webp&quality=lossless" class="skin-img" alt="Kukri Bıçağı #2">
-        <div class="cage-bars"></div>
-        <div class="padlock">🔒</div>
-      </div>
-      <div class="knife-info">
-        <div class="knife-title">★ Kukri Bıçağı</div>
-        <div class="knife-sub">Solgun #2</div>
-        <div class="knife-rarity">ÇOK GİZLİ</div>
-      </div>
-    </div>
-
-    <!-- 6. Bıçak -->
-    <div class="knife-card">
-      <div class="cage-container">
-        <img src="https://media.discordapp.net/attachments/1487637709164908696/1563297638575513652/1111.png?ex=6add1de1&is=6adbcc61&hm=c4f7aa0c0eed20db76f728c31c62dfbc091ae901552610a770801247672d95eb&=&format=webp&quality=lossless" class="skin-img" alt="Karambit">
-        <div class="cage-bars"></div>
-        <div class="padlock">🔒</div>
-      </div>
-      <div class="knife-info">
-        <div class="knife-title">★ Karambit</div>
-        <div class="knife-sub">Solgun</div>
-        <div class="knife-rarity">ÇOK GİZLİ</div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- ALT SAYAÇ VE İLERLEME -->
-  <div class="bottom-section">
-    <div class="cd-title">TÜM EŞYALARIN TAKAS KİLİDİ BİTİŞİ: 28 EKİM 2026 · 04:00</div>
-    
-    <div class="countdown">
-      <div class="unit"><div class="num" id="d">--</div><div class="lab">Gün</div></div>
-      <div class="unit"><div class="num" id="h">--</div><div class="lab">Saat</div></div>
-      <div class="unit"><div class="num" id="m">--</div><div class="lab">Dakika</div></div>
-      <div class="unit"><div class="num" id="s">--</div><div class="lab">Saniye</div></div>
-    </div>
-
-    <div class="bar-wrap">
-      <div class="bar"><i id="bar"></i></div>
-      <div class="bar-cap">
-        <span>Kilit Başlangıcı</span>
-        <span id="pct">%0</span>
-        <span>28 Ekim 04:00</span>
-      </div>
-    </div>
-
-    <div class="actions">
-      <button class="btn-want" id="wantBtn">🔥 HEMEN İSTİYORUM</button>
-    </div>
-  </div>
-
+  <div class="done" id="done">Süre doldu, ödeme zamanı!</div>
+  <button id="btn">Paramı istiyorum</button>
 </div>
 
-<!-- MODAL -->
-<div class="modal" id="memeModal">
-  <div class="modal-content">
-    <span class="close-btn" id="closeModal">&times;</span>
-    <img src="https://i.imgflip.com/9dmdmx.jpg" alt="Bekleme Sırası">
+<div class="overlay" id="ov">
+  <div class="popup">
+    <span class="finger">🖕</span>
+    <p>Sabret biraz, süre dolmadı.</p>
+    <button id="close">Tamam</button>
   </div>
 </div>
 
 <script>
-  // 28 Ekim 2026 Saat 04:00:00
-  const UNLOCK_AT = new Date(2026, 9, 28, 4, 0, 0);   
-  const LOCK_START = new Date(UNLOCK_AT.getTime() - 7 * 24 * 60 * 60 * 1000); 
+  // 1 Kasım 2026 + 8 gün = 9 Kasım 2026 20:25 (Türkiye saati)
+  const target = new Date("2026-11-09T20:25:00+03:00").getTime();
+  const $ = id => document.getElementById(id);
+  const pad = n => String(n).padStart(2, "0");
+  let last = {};
 
-  const el = {
-    d: document.getElementById('d'),
-    h: document.getElementById('h'),
-    m: document.getElementById('m'),
-    s: document.getElementById('s'),
-    bar: document.getElementById('bar'),
-    pct: document.getElementById('pct')
-  };
-
-  const pad = n => String(n).padStart(2, '0');
-
-  function tick(){
-    const now = Date.now();
-    const diff = UNLOCK_AT.getTime() - now;
-
-    if (diff <= 0){
-      el.d.textContent = '00';
-      el.h.textContent = '00';
-      el.m.textContent = '00';
-      el.s.textContent = '00';
-      el.bar.style.width = '100%';
-      el.pct.textContent = '%100';
-      return;
+  function update() {
+    let diff = target - Date.now();
+    if (diff <= 0) { diff = 0; $("done").style.display = "block"; }
+    const v = {
+      d: Math.floor(diff / 864e5),
+      h: Math.floor(diff % 864e5 / 36e5),
+      m: Math.floor(diff % 36e5 / 6e4),
+      s: Math.floor(diff % 6e4 / 1e3)
+    };
+    for (const k in v) {
+      const el = $(k);
+      el.textContent = pad(v[k]);
+      if (last[k] !== v[k]) { const b = el.parentElement; b.classList.remove("tick"); void b.offsetWidth; b.classList.add("tick"); }
     }
-
-    const totalSec = Math.floor(diff / 1000);
-    const days  = Math.floor(totalSec / 86400);
-    const hours = Math.floor((totalSec % 86400) / 3600);
-    const mins  = Math.floor((totalSec % 3600) / 60);
-    const secs  = totalSec % 60;
-
-    el.d.textContent = pad(days);
-    el.h.textContent = pad(hours);
-    el.m.textContent = pad(mins);
-    el.s.textContent = pad(secs);
-
-    const total = UNLOCK_AT.getTime() - LOCK_START.getTime();
-    let p = ((now - LOCK_START.getTime()) / total) * 100;
-    p = Math.max(0, Math.min(100, p));
-    el.bar.style.width = p.toFixed(2) + '%';
-    el.pct.textContent = '%' + p.toFixed(1).replace('.', ',');
+    last = v;
   }
+  update(); setInterval(update, 1000);
 
-  setInterval(tick, 1000);
-  tick();
-
-  /* Modal */
-  const modal = document.getElementById('memeModal');
-  document.getElementById('wantBtn').addEventListener('click', () => modal.classList.add('show'));
-  document.getElementById('closeModal').addEventListener('click', () => modal.classList.remove('show'));
-  modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('show'); });
+  $("btn").onclick = () => $("ov").classList.add("show");
+  $("close").onclick = () => $("ov").classList.remove("show");
+  $("ov").addEventListener("click", e => { if (e.target === $("ov")) $("ov").classList.remove("show"); });
 </script>
 </body>
 </html>
