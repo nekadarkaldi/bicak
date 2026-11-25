@@ -20,10 +20,32 @@
   }
   @keyframes in { from { opacity: 0; transform: translateY(14px); } }
   .label { font-size: .8rem; letter-spacing: 3px; color: var(--mute); text-transform: uppercase; }
-  .amount {
-    font-size: clamp(2.6rem, 12vw, 4rem); font-weight: 800; color: var(--t);
-    margin: 6px 0 24px; text-shadow: 0 0 24px rgba(234,190,84,.35);
+
+  .item { margin: 16px 0 22px; }
+
+  /* Büyük, net görsel alanı */
+  .item-img-wrap {
+    width: 100%; height: 220px;
+    display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(circle at 50% 40%, #232b36, #0d1218);
+    border: 1px solid var(--line); border-radius: 6px; overflow: hidden;
   }
+  .item-img {
+    max-width: 100%; max-height: 100%;
+    width: auto; height: auto;
+    object-fit: contain; display: block;
+  }
+
+  .item-name {
+    margin-top: 12px;
+    font-size: 1rem; font-weight: 700; color: var(--t);
+    line-height: 1.35; word-break: break-word;
+  }
+  .item-sub {
+    font-size: .72rem; color: var(--mute);
+    letter-spacing: 1px; text-transform: uppercase; margin-top: 4px;
+  }
+
   .timer { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 26px; }
   .box { background: var(--bg); border: 1px solid var(--line); border-bottom: 3px solid var(--ct); border-radius: 4px; padding: 12px 2px; }
   .box span { display: block; font-size: clamp(1.6rem, 8vw, 2.4rem); font-weight: 700; font-variant-numeric: tabular-nums; }
@@ -57,8 +79,19 @@
 </head>
 <body>
 <div class="card">
-  <div class="label">Toplam ödeme</div>
-  <div class="amount">15.900 TL</div>
+  <div class="label">Ödül</div>
+
+  <div class="item">
+    <div class="item-img-wrap">
+      <img class="item-img" id="itemImg"
+           src="https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpovbSsLQJf2PLacDBA5ciJnJm0k_PkMq_um25V4dB8xO2TpYmkjgbmrhZqMmH7JYCRcFA3aF2B8lO-webogMW-uZmdmiNmu3Y8pSGKqn7hwC0"
+           alt="Karambit | Orman DDPAT (Görevde Kullanılmış)"
+           referrerpolicy="no-referrer"
+           onerror="this.onerror=null;this.src='https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpovbSsLQJf2PLacDBA5ciJnJm0k_PkMq_um25V4dB8xO2TpYmkjgbmrhZqMmH7JYCRcFA3aF2B8lO-webogMW-uZmdmiNmu3Y8pSGKqn7hwC0'">
+    </div>
+    <div class="item-name">★ Karambit | Orman DDPAT (Görevde Kullanılmış)</div>
+    <div class="item-sub">Süre dolunca ödül senin</div>
+  </div>
 
   <div class="timer">
     <div class="box"><span id="d">00</span><small>Gün</small></div>
@@ -67,8 +100,8 @@
     <div class="box"><span id="s">00</span><small>Sn</small></div>
   </div>
 
-  <div class="done" id="done">Süre doldu, ödeme zamanı!</div>
-  <button id="btn">Paramı istiyorum</button>
+  <div class="done" id="done">Süre doldu, ödülün kilidi açıldı!</div>
+  <button id="btn">Ödülümü istiyorum</button>
 </div>
 
 <div class="overlay" id="ov">
@@ -80,8 +113,8 @@
 </div>
 
 <script>
-  // 1 Kasım 2026 + 8 gün = 9 Kasım 2026 20:25 (Türkiye saati)
-  const target = new Date("2026-11-09T20:25:00+03:00").getTime();
+  // 17 gün sonrası
+  const target = Date.now() + 17 * 24 * 60 * 60 * 1000;
   const $ = id => document.getElementById(id);
   const pad = n => String(n).padStart(2, "0");
   let last = {};
@@ -104,7 +137,13 @@
   }
   update(); setInterval(update, 1000);
 
-  $("btn").onclick = () => $("ov").classList.add("show");
+  $("btn").onclick = () => {
+    if (target - Date.now() > 0) {
+      $("ov").classList.add("show");
+    } else {
+      $("done").textContent = "Tebrikler! Ödülün kilidi açıldı.";
+    }
+  };
   $("close").onclick = () => $("ov").classList.remove("show");
   $("ov").addEventListener("click", e => { if (e.target === $("ov")) $("ov").classList.remove("show"); });
 </script>
